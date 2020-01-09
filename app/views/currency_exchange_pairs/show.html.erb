@@ -26,12 +26,14 @@
         <tr>
           <td> <%= @currency_exchange_pair.base_currency %> </td>
           <td> <%= @currency_exchange_pair.target_currency %> </td>
-          <td> <%= exchange_rate[:date] %> </td>
-          <td> <%= exchange_rate[:rate] %> </td>
+          <td> <%= exchange_rate[0] %> </td>
+          <td> <%= exchange_rate[1] %> </td>
         </tr>
       <% end %>
     </tbody>
   </table>
+
+<%= line_chart @data, xtitle: "Duration", ytitle: "Price" %>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
               currency_exchange_pairs_path, :class => 'btn btn-default'  %>

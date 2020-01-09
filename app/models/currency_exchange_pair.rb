@@ -18,12 +18,12 @@ private
   def process_exchange_rates(target_rates, base_rates)
     rates = []
     target_rates.each_with_index do |target_rate, index|
-      rate = {}
-      rate[:date] = target_rate[0]
+      rate = []
+      rate[0] = target_rate[0]
       if conversion_needed?
-        rate[:rate] = calculate_exchange_rate(base_rates[index][1], target_rate[1])
+        rate[1] = calculate_exchange_rate(base_rates[index][1], target_rate[1])
       else
-        rate[:rate] = target_rate[1]
+        rate[1] = target_rate[1]
       end
       rates << rate
     end
