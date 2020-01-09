@@ -1,11 +1,11 @@
 class CurrencyExchangePair < ApplicationRecord
-  BASE_CURRENCY = 'EUR'
 
-  # TBD: exchange rate incase base currency other then EUR
   def fetch_historic_data
-    exchange_rates = fetch_exchange_rates(target_currency)
-    process_exchange_rates(exchange_rates)
-  end  
+    target_rates = fetch_exchange_rates(target_currency)
+    base_rates = nil
+    base_rates = fetch_exchange_rates(base_currency) if conversion_needed?
+    process_exchange_rates(target_rates, base_rates)
+  end
 
 private
 
@@ -14,9 +14,20 @@ private
     CurrencyExchangeRate.where(date: start_date..end_date).where(target_currency: currency).pluck(:date, :rate)
   end
 
-  # TBD: wrapper to process data incase base currency other then EUR
-  def process_exchange_rates(exchange_rates)
-    exchange_rates
+  # TBD: needs refactoring
+  def process_exchange_rates(target_rates, base_rates)
+    rates = []
+    target_rates.each_with_index do |target_rate, index|
+      rate = {}
+      rate[:date] = target_rate[0]
+      if conversion_needed?
+        rate[:rate] = calculate_exchange_rate(base_rates[index][1], target_rate[1])
+      else
+        rate[:rate] = target_rate[1]
+      end
+      rates << rate
+    end
+    rates
   end
  
   def calculate_dates(week_number)
@@ -25,6 +36,15 @@ private
   end
 
   def conversion_needed?
-    base != BASE_CURRENCY
+    base_currency != global_base_currency
+  end
+
+  def global_base_currency
+    ENV['BASE_CURRENCY'] || 'EUR'
+  end
+
+  # TBD
+  def calculate_exchange_rate(base_rate, target_rate)
+    (target_rate / base_rate)
   end
 end
