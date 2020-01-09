@@ -10,6 +10,7 @@ class CurrencyExchangePairsController < ApplicationController
   # GET /currency_exchange_pairs/1
   # GET /currency_exchange_pairs/1.json
   def show
+    @data = @currency_exchange_pair.fetch_historic_data
   end
 
   # GET /currency_exchange_pairs/new
