@@ -12,6 +12,27 @@
   <dd><%= @currency_exchange_pair.number_of_weeks %></dd>
 </dl>
 
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Base currency</th>
+        <th>Target currency</th>
+        <th>Date</th>
+        <th>Exchange rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data.each do |exchange_rate| %>
+        <tr>
+          <td> <%= @currency_exchange_pair.base_currency %> </td>
+          <td> <%= @currency_exchange_pair.target_currency %> </td>
+          <td> <%= exchange_rate[:date] %> </td>
+          <td> <%= exchange_rate[:rate] %> </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
 <%= link_to t('.back', :default => t("helpers.links.back")),
               currency_exchange_pairs_path, :class => 'btn btn-default'  %>
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
