@@ -1,32 +1,48 @@
-<%= form_with(model: currency_exchange_pair, local: true) do |form| %>
-  <% if currency_exchange_pair.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(currency_exchange_pair.errors.count, "error") %> prohibited this currency_exchange_pair from being saved:</h2>
+<%= form_for @currency_exchange_pair, :html => { :class => "form-horizontal currency_exchange_pair" } do |f| %>
 
-      <ul>
-        <% currency_exchange_pair.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+  <% if @currency_exchange_pair.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@currency_exchange_pair.errors.count, "error") %> prohibited this currency_exchange_pair from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @currency_exchange_pair.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
         <% end %>
-      </ul>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :base_currency %>
-    <%= form.text_field :base_currency %>
+  <div class="form-group">
+    <%= f.label :base_currency, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :base_currency, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:base_currency) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :target_currency, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :target_currency, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:target_currency) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :number_of_weeks, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :number_of_weeks, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:number_of_weeks) %>
   </div>
 
-  <div class="field">
-    <%= form.label :target_currency %>
-    <%= form.text_field :target_currency %>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                currency_exchange_pairs_path, :class => 'btn btn-default' %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :number_of_weeks %>
-    <%= form.number_field :number_of_weeks %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
 <% end %>

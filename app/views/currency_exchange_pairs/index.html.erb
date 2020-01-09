@@ -1,31 +1,42 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Currency Exchange Pairs</h1>
-
-<table>
+<%- model_class = CurrencyExchangePair -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Base currency</th>
-      <th>Target currency</th>
-      <th>Number of weeks</th>
-      <th colspan="3"></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:base_currency) %></th>
+      <th><%= model_class.human_attribute_name(:target_currency) %></th>
+      <th><%= model_class.human_attribute_name(:number_of_weeks) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
   <tbody>
     <% @currency_exchange_pairs.each do |currency_exchange_pair| %>
       <tr>
+        <td><%= link_to currency_exchange_pair.id, currency_exchange_pair_path(currency_exchange_pair) %></td>
         <td><%= currency_exchange_pair.base_currency %></td>
         <td><%= currency_exchange_pair.target_currency %></td>
         <td><%= currency_exchange_pair.number_of_weeks %></td>
-        <td><%= link_to 'Show', currency_exchange_pair %></td>
-        <td><%= link_to 'Edit', edit_currency_exchange_pair_path(currency_exchange_pair) %></td>
-        <td><%= link_to 'Destroy', currency_exchange_pair, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%=l currency_exchange_pair.created_at %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      currency_exchange_pair_path(currency_exchange_pair), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_currency_exchange_pair_path(currency_exchange_pair), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      currency_exchange_pair_path(currency_exchange_pair),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Currency Exchange Pair', new_currency_exchange_pair_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_currency_exchange_pair_path,
+            :class => 'btn btn-primary' %>
