@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Base currency:</strong>
+  <%= @currency_exchange_pair.base_currency %>
+</p>
+
+<p>
+  <strong>Target currency:</strong>
+  <%= @currency_exchange_pair.target_currency %>
+</p>
+
+<p>
+  <strong>Number of weeks:</strong>
+  <%= @currency_exchange_pair.number_of_weeks %>
+</p>
+
+<%= link_to 'Edit', edit_currency_exchange_pair_path(@currency_exchange_pair) %> |
+<%= link_to 'Back', currency_exchange_pairs_path %>

@@ -1,0 +1,32 @@
+<%= form_with(model: currency_exchange_pair, local: true) do |form| %>
+  <% if currency_exchange_pair.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(currency_exchange_pair.errors.count, "error") %> prohibited this currency_exchange_pair from being saved:</h2>
+
+      <ul>
+        <% currency_exchange_pair.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :base_currency %>
+    <%= form.text_field :base_currency %>
+  </div>
+
+  <div class="field">
+    <%= form.label :target_currency %>
+    <%= form.text_field :target_currency %>
+  </div>
+
+  <div class="field">
+    <%= form.label :number_of_weeks %>
+    <%= form.number_field :number_of_weeks %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
