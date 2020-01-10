@@ -1,5 +1,10 @@
 class CurrencyExchangePair < ApplicationRecord
 
+  validates :base_currency, presence: true
+  validates :target_currency, presence: true
+  validates :number_of_weeks, presence: true
+  validates :amount, presence: true
+
   def fetch_historic_data
     target_rates = fetch_exchange_rates(target_currency)
     base_rates = nil
