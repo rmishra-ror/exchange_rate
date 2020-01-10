@@ -7,4 +7,8 @@ class CurrencyExchangeRate < ApplicationRecord
   validates :rate, presence: true
   validates :date, presence: true
 
+  def self.exists_for_date?(date)
+    CurrencyExchangeRate.find_by(date: date).present?
+  end
+
 end
