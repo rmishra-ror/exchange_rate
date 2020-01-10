@@ -70,6 +70,6 @@ class CurrencyExchangePairsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def currency_exchange_pair_params
-      params.require(:currency_exchange_pair).permit(:base_currency, :target_currency, :number_of_weeks)
+      params.require(:currency_exchange_pair).permit(:base_currency, :target_currency, :number_of_weeks, :amount)
     end
 end

@@ -9,7 +9,7 @@
       <th><%= model_class.human_attribute_name(:base_currency) %></th>
       <th><%= model_class.human_attribute_name(:target_currency) %></th>
       <th><%= model_class.human_attribute_name(:number_of_weeks) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:amount_in_base_currency) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -20,7 +20,7 @@
         <td><%= currency_exchange_pair.base_currency %></td>
         <td><%= currency_exchange_pair.target_currency %></td>
         <td><%= currency_exchange_pair.number_of_weeks %></td>
-        <td><%=l currency_exchange_pair.created_at %></td>
+        <td><%= currency_exchange_pair.amount %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       currency_exchange_pair_path(currency_exchange_pair), :class => 'btn btn-default btn-xs' %>
