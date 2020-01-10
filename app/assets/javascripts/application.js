@@ -13,4 +13,6 @@
 //= require rails-ujs
 //= require chartkick
 //= require Chart.bundle
+//= require jquery3
+//= require dataTables/jquery.dataTables
 //= require_tree .

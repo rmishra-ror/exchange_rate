@@ -1,5 +1,4 @@
 class CurrencyExchangePair < ApplicationRecord
-
   validates :base_currency, presence: true
   validates :target_currency, presence: true
   validates :number_of_weeks, presence: true
@@ -12,11 +11,11 @@ class CurrencyExchangePair < ApplicationRecord
     process_exchange_rates(target_rates, base_rates)
   end
 
-private
+  private
 
   def fetch_exchange_rates(currency)
     start_date, end_date = calculate_dates(number_of_weeks)
-    CurrencyExchangeRate.where(date: start_date..end_date).where(target_currency: currency).pluck(:date, :rate)
+    CurrencyExchangeRate.where(date: start_date..end_date, target_currency: currency).pluck(:date, :rate)
   end
 
   # TBD: needs refactoring
@@ -25,16 +24,16 @@ private
     target_rates.each_with_index do |target_rate, index|
       rate = []
       rate[0] = target_rate[0]
-      if conversion_needed?
-        rate[1] = calculate_exchange_rate(base_rates[index][1], target_rate[1])
-      else
-        rate[1] = target_rate[1]
-      end
+      rate[1] = if conversion_needed?
+                  calculate_exchange_rate(base_rates[index][1], target_rate[1])
+                else
+                  target_rate[1]
+                end
       rates << rate
     end
     rates
   end
- 
+
   def calculate_dates(week_number)
     start_date = (Date.today - week_number.weeks).beginning_of_week
     [start_date, Date.today]

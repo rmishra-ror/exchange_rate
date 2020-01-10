@@ -8,10 +8,19 @@
   <dd><%= @currency_exchange_pair.base_currency %></dd>
   <dt><strong><%= model_class.human_attribute_name(:target_currency) %>:</strong></dt>
   <dd><%= @currency_exchange_pair.target_currency %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:amount) %>:</strong></dt>
+  <dd><%= @currency_exchange_pair.amount %></dd>
   <dt><strong><%= model_class.human_attribute_name(:number_of_weeks) %>:</strong></dt>
   <dd><%= @currency_exchange_pair.number_of_weeks %></dd>
+  <dt><strong>Current Rate:</strong></dt>
+  <dd><%= @current_rate %></dd>  
 </dl>
+<!-- <input type="text" class='datepicker' > -->
+<div class="input-group align-items-center">
+  <div id="weekpicker1"></div>
+</div>
 
+<% # TDB: Move to partial %>
 <table class="table table-hover">
     <thead>
       <tr>
@@ -19,15 +28,20 @@
         <th>Target currency</th>
         <th>Date</th>
         <th>Exchange rate</th>
+        <th>Valuation</th>
+        <th> P/L </th>
       </tr>
     </thead>
     <tbody>
       <% @data.each do |exchange_rate| %>
-        <tr>
+        <tr class="exchange-rate-<%= exchange_rate[1] %>">
           <td> <%= @currency_exchange_pair.base_currency %> </td>
           <td> <%= @currency_exchange_pair.target_currency %> </td>
           <td> <%= exchange_rate[0] %> </td>
           <td> <%= exchange_rate[1] %> </td>
+          <% # TBD: move to decorator  %>
+          <td> <%= @currency_exchange_pair.amount * exchange_rate[1] %> </td>
+          <td> <%= @currency_exchange_pair.amount * (@current_rate - exchange_rate[1]) %> </td>
         </tr>
       <% end %>
     </tbody>
@@ -44,3 +58,59 @@
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    
+    var table = $('.table').DataTable({
+      "aoColumnDefs": [
+        { "bSortable": false, "aTargets": [ 0, 1, 2, 3, 4 ] }          
+      ]
+    });   
+    
+    var weekpicker = $("#weekpicker1").weekpicker();
+    var inputField = weekpicker.find("input");
+
+    inputField.datetimepicker().on("dp.change", function() {
+      var week = weekpicker.getWeek()
+      var year = weekpicker.getYear()
+
+      start = moment().year(year).week(week)
+      end = moment(start._d).add(7, 'days');
+      var maxRate = 0;
+      // Set to highest integer value below
+      var minRate = 1000000;
+
+      $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+          var min = start;
+          var max = end;
+          var startDate = new Date(data[2]);
+          
+          if (
+              (min == null && max == null ) || 
+              (min == null && startDate <= max) ||
+              (max == null && startDate >= min) ||
+              (startDate <= max && startDate >= min) 
+            ) {
+
+            if (maxRate < data[3]) {
+              maxRate = data[3];
+            }
+
+            if (minRate > data[3]) {
+              minRate = data[3];
+            }
+
+            return true;
+          }
+          return false;
+        }
+      );
+      table.draw();      
+      $.fn.dataTable.ext.search.pop();
+      debugger      
+      $(`.exchange-rate-${maxRate}`).css('color', 'red');
+      $(`.exchange-rate-${minRate}`).css('color', 'yellow');
+    })
+  });
+</script>

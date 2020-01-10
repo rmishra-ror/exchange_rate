@@ -11,6 +11,7 @@ class CurrencyExchangePairsController < ApplicationController
 
   def show
     @data = @currency_exchange_pair.fetch_historic_data
+    @current_rate = CurrencyExchangeRate.where(date: Date.today - 7, target_currency: @currency_exchange_pair.target_currency).pluck(:rate).first    
   end
 
   # GET /currency_exchange_pairs/new
